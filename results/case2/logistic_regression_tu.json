@@ -1,0 +1,26 @@
+{
+  "case": "case2",
+  "model": "logistic_regression",
+  "author": "tu",
+  "task": "classification (SCA = 1 bo gio, SCA = 0 mua)",
+  "features": ["add_count", "remove_count", "view_count", "detail_count", "add_to_detail_ratio", "search_count",
+               "unique_categories_viewed", "avg_price_bucket", "max_price_bucket", "unique_products_viewed",
+               "avg_dwell_time", "session_duration", "hod", "dow"],
+  "n_features": 14,
+  "split": "Train 143,771 / Test 70,814 (67/33), stratified, random_state=42; CV 10-fold stratified tren train, cung fold cho moi model",
+  "best_params": {"preprocessing": "bien so: signed-log -> spline (n_knots=6, degree=3) ghep voi tuong tac bac 2 (da chuan hoa); hod, dow: one-hot",
+                  "C": 100, "max_iter": 3000, "class_weight": null},
+  "tuning": "GridSearchCV C {0.1, 1, 10, 100} x 10 fold, scoring = roc_auc",
+  "metrics_cv": {
+    "roc_auc_mean": 0.7608,
+    "roc_auc_std": 0.0030,
+    "p_star": 0.70,
+    "macro_f1_at_p_star": 0.653,
+    "f1_class0_at_p_star": 0.471,
+    "recall_class0_at_p_star": 0.523
+  },
+  "baseline_logreg_chuan_hoa": {"C": 0.01, "roc_auc_mean": 0.6857, "roc_auc_std": 0.0042, "p_star": 0.76, "macro_f1_at_p_star": 0.611},
+  "metrics_test": {"roc_auc": null, "macro_f1": null},
+  "notebook": "notebooks/case2_tu/logreg_experiments.py",
+  "notes": "Cung 14 bien Case 2 nhu RF. Ban spline + tuong tac hon ban LogReg goc (chi chuan hoa) +0.075 AUC, tot hon 10/10 fold. p* chon tren OOF train de toi da macro-F1. Tap test chua dung, se chay 1 lan o cuoi."
+}

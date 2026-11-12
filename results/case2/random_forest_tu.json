@@ -1,0 +1,25 @@
+{
+  "case": "case2",
+  "model": "random_forest",
+  "author": "tu",
+  "task": "classification (SCA = 1 bo gio, SCA = 0 mua)",
+  "features": ["add_count", "remove_count", "view_count", "detail_count", "add_to_detail_ratio", "search_count",
+               "unique_categories_viewed", "avg_price_bucket", "max_price_bucket", "unique_products_viewed",
+               "avg_dwell_time", "session_duration", "hod", "dow"],
+  "n_features": 14,
+  "split": "Train 143,771 / Test 70,814 (67/33), stratified, random_state=42; CV 10-fold stratified tren train, cung fold cho moi model",
+  "best_params": {"n_estimators": 200, "max_features": 0.5, "min_samples_leaf": 35, "class_weight": null},
+  "tuning": "GridSearchCV max_features {sqrt, 0.5, 0.9} x min_samples_leaf {1, 5, 35} = 9 cau hinh x 10 fold, scoring = roc_auc",
+  "metrics_cv": {
+    "roc_auc_mean": 0.7656,
+    "roc_auc_std": 0.0028,
+    "p_star": 0.68,
+    "macro_f1_at_p_star": 0.656,
+    "macro_f1_at_0.5": 0.556
+  },
+  "metrics_test": {"roc_auc": null, "macro_f1": null},
+  "feature_importance_top5": {"view_count": 0.187, "remove_count": 0.161, "session_duration": 0.094,
+                              "avg_dwell_time": 0.087, "add_to_detail_ratio": 0.078},
+  "notebook": "notebooks/case2_tu/train_pipeline.py",
+  "notes": "Case 2 gom 16 bien ung vien, bo nevents (= tong 4 bien khac) va unique_products_in_cart (p = 0.35) -> 14 bien. p* chon tren OOF train de toi da macro-F1 (threshold moving thay cho class_weight). Tap test chua dung, se chay 1 lan o cuoi. Chay tren Kaggle (sca-rf-case2), sklearn 1.6.1."
+}
