@@ -16,35 +16,65 @@
     "dow"
   ],
   "n_features": 11,
-  "split": "Provided train.csv (143,771 rows) / test.csv (70,814 rows); seed=42. Ten-fold CV on train using the shared fold assignments. Test used only once after tuning.",
+  "split": "Provided fixed split: data/train_folds.csv (143771 rows; shared folds 0-9) and data/test.csv (70814 rows); no rows removed or split regenerated. RandomizedSearchCV seed=42.",
   "best_params": {
-    "n_estimators": 300,
-    "max_depth": 5,
-    "learning_rate": 0.08,
-    "subsample": 0.8,
-    "colsample_bytree": 1.0,
+    "subsample": 0.7,
+    "scale_pos_weight": 1.0,
+    "reg_lambda": 1,
+    "n_estimators": 200,
     "min_child_weight": 3,
-    "reg_lambda": 0.5,
-    "scale_pos_weight": 1.0
+    "max_depth": 6,
+    "learning_rate": 0.08,
+    "colsample_bytree": 0.9
   },
   "metrics_test": {
-    "rmse": 0.37731562365480115,
-    "mse": 0.14236707985401154,
-    "mae": 0.2849535048007965,
-    "r2": 0.15517741441726685,
-    "accuracy": 0.7965938938627954,
-    "balanced_accuracy": 0.5651715757413427,
-    "precision": 0.8087554496831318,
-    "recall_SCA1": 0.9705327124647166,
-    "f1": 0.8822894874476988,
-    "roc_auc": 0.7659808840887402,
-    "recall_SCA0": 0.1598104390179688,
-    "recall": 0.9705327124647166
+    "rmse": 0.3773750100904537,
+    "mse": 0.14241189824077002,
+    "mae": 0.28532303618432625,
+    "r2": 0.15491148797653465,
+    "roc_auc": 0.7659041998555319
+  },
+  "metrics_class": {
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.8084047718961693,
+      "recall_1": 0.9697776019848618,
+      "f1_1": 0.8817687686460419,
+      "precision_0": 0.588997555012225,
+      "recall_0": 0.15855986309484632,
+      "f1_0": 0.24985738733599544,
+      "balanced_accuracy": 0.5641687325398541,
+      "macro_f1": 0.5658130779910187,
+      "pr_auc": 0.9232585477400455,
+      "accuracy": 0.7957324822775157
+    },
+    "at_p_star": {
+      "threshold": 0.6871045231819153,
+      "precision_1": 0.857145509571288,
+      "recall_1": 0.829992269106992,
+      "f1_1": 0.8433503836317136,
+      "precision_0": 0.4422884104983781,
+      "recall_0": 0.4935825709208188,
+      "f1_0": 0.4665297996764962,
+      "balanced_accuracy": 0.6617874200139053,
+      "macro_f1": 0.6549400916541048,
+      "pr_auc": 0.9232585477400455,
+      "accuracy": 0.7578162510238089
+    }
   },
   "cv_10fold": {
-    "rmse_mean": 0.3767349403625138,
-    "rmse_std": 0.0008773741400797263
+    "rmse_mean": 0.37672883492281367,
+    "rmse_std": 0.0008378464810868558,
+    "auc_mean": 0.7681545946839604,
+    "auc_std": 0.0030200020903049466
+  },
+  "baseline_test": {
+    "rmse": 0.4105083908934278,
+    "mse": 0.1685171389939113,
+    "mae": 0.33703516627406716,
+    "r2": -1.436650798325445e-11,
+    "roc_auc": 0.5
   },
   "notebook": "notebooks/case1_xgb_lam.ipynb",
-  "notes": "10-fold CV uses the shared fold assignments; scale_pos_weight was searched within each training fold; best value was 1.0 (no positive-class reweighting). standard SHAP summary/bar/dependence PNGs are saved in shap_figures/. 30-trial randomized grid search, seed 42. Mean CV MSE=0.141930; mean CV MAE=0.284387. Test accuracy=0.796594, balanced_accuracy=0.565172, recall_SCA1=0.970533, recall_SCA0=0.159810, ROC-AUC=0.765981. Class metrics use 0.50 cutoff. Assumes SCA=1 is abandonment. The agreed train/test files have 66 exact record overlaps; files provided by the group were used unchanged, so test estimates may be mildly optimistic.Train.csv values were used with fold IDs aligned by row order. Summary and dependence plots use a seeded 30,000-row display sample; saved OOF matrices contain all training rows."
+  "notes": "Tuning: RandomizedSearchCV, n_iter=30, random_state=42, PredefinedSplit(train['fold']), scoring={'rmse': probability RMSE, 'auc': roc_auc}, refit='rmse'. Parameter distributions: n_estimators=[100,200,300,400,500], max_depth=[2,3,4,5,6], learning_rate=[0.03,0.05,0.08,0.1], subsample=[0.7,0.8,0.9,1.0], colsample_bytree=[0.7,0.8,0.9,1.0], min_child_weight=[1,3,5], reg_lambda=[0.5,1,2,5], scale_pos_weight=[0.25,0.5,1.0]. Imputer is fit within each fold. p_star=0.68710452318191528 was selected using train OOF probabilities to maximize macro-F1; test was not used to select the threshold. Best-candidate CV RMSE=0.37672883492281367 (population sd=0.00083784648108685585); CV ROC-AUC=0.76815459468396041 (population sd=0.0030200020903049466). Exact test/train overlaps by all shared columns: 64. The supplied data files were used without dropping rows."
 }
