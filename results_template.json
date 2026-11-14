@@ -2,20 +2,60 @@
   "case": "case1",
   "model": "xgboost",
   "author": "ten_ban",
-  "features": ["add_count", "remove_count", "view_count"],
-  "n_features": 3,
-  "split": "mo ta cach chia train/test, ti le, seed",
+  "features": ["add_count", "remove_count", "view_count", "add_to_detail_ratio", "search_count",
+               "unique_categories_viewed", "avg_price_bucket", "avg_dwell_time", "session_duration",
+               "hod", "dow"],
+  "n_features": 11,
+  "split": "data/train_folds.csv (143,771) / data/test.csv (70,814), khong chia lai, khong xoa dong; CV 10-fold theo cot fold (PredefinedSplit); seed 42",
   "best_params": {},
   "metrics_test": {
     "rmse": 0.0,
     "mse": 0.0,
     "mae": 0.0,
-    "r2": 0.0
+    "r2": 0.0,
+    "roc_auc": 0.0
   },
-  "cv_5fold": {
+  "metrics_class": {
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.0,
+      "recall_1": 0.0,
+      "f1_1": 0.0,
+      "precision_0": 0.0,
+      "recall_0": 0.0,
+      "f1_0": 0.0,
+      "balanced_accuracy": 0.0,
+      "macro_f1": 0.0,
+      "pr_auc": 0.0,
+      "accuracy": 0.0
+    },
+    "at_p_star": {
+      "threshold": 0.0,
+      "precision_1": 0.0,
+      "recall_1": 0.0,
+      "f1_1": 0.0,
+      "precision_0": 0.0,
+      "recall_0": 0.0,
+      "f1_0": 0.0,
+      "balanced_accuracy": 0.0,
+      "macro_f1": 0.0,
+      "pr_auc": 0.0,
+      "accuracy": 0.0
+    }
+  },
+  "cv_10fold": {
     "rmse_mean": 0.0,
-    "rmse_std": 0.0
+    "rmse_std": 0.0,
+    "auc_mean": 0.0,
+    "auc_std": 0.0
   },
-  "notebook": "notebooks/case1_xgb_ten.ipynb",
-  "notes": ""
+  "baseline_test": {
+    "rmse": 0.0,
+    "mse": 0.0,
+    "mae": 0.0,
+    "r2": 0.0,
+    "roc_auc": 0.0
+  },
+  "notebook": "notebooks/case1_xgboost_ten.ipynb",
+  "notes": "khong gian tham so, cach bien doi bien, moi sai khac so voi CONTRIBUTING.md"
 }
