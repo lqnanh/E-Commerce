@@ -1,0 +1,145 @@
+{
+  "case": "case2",
+  "model": "logistic_regression",
+  "author": "tu",
+  "features": [
+    "add_count",
+    "remove_count",
+    "view_count",
+    "detail_count",
+    "add_to_detail_ratio",
+    "search_count",
+    "unique_categories_viewed",
+    "avg_price_bucket",
+    "max_price_bucket",
+    "unique_products_viewed",
+    "avg_dwell_time",
+    "session_duration",
+    "hod",
+    "dow"
+  ],
+  "n_features": 14,
+  "n_train": 143771,
+  "n_test": 70814,
+  "split": "data/train_folds.csv (143,771) / data/test.csv (70,814), khong chia lai, khong xoa dong; CV 10-fold theo cot fold (PredefinedSplit); seed 42",
+  "preprocessing": "12 bien so: SimpleImputer(median) -> signed log -> SplineTransformer(n_knots=6, degree=3), ghep voi SimpleImputer(median) -> signed log -> StandardScaler -> tuong tac bac 2 -> StandardScaler; hod, dow: one-hot (handle_unknown=ignore). Tat ca trong Pipeline, chi tu 14 bien Case 2.",
+  "tuning": "RandomizedSearchCV(n_iter=30, random_state=42, cv=PredefinedSplit(train['fold']), scoring={'rmse': RMSE_PROBA, 'auc': 'roc_auc'}, refit='rmse'), refit tren toan bo train",
+  "param_distributions": {
+    "clf__C": "loguniform(1e-3, 1e3)"
+  },
+  "best_params": {
+    "solver": "lbfgs",
+    "max_iter": 3000,
+    "class_weight": null,
+    "spline_n_knots": 6,
+    "spline_degree": 3,
+    "n_model_inputs": 205,
+    "C": 659.871107205407
+  },
+  "metrics_test": {
+    "rmse": 0.3797217781970479,
+    "mse": 0.14418862883712802,
+    "mae": 0.2868199431298988,
+    "r2": 0.14436816516087891,
+    "roc_auc": 0.7593892510859948
+  },
+  "metrics_class": {
+    "p_star": 0.69,
+    "p_star_rule": "max macro-F1 tren OOF train, nguong 0.01-0.99 buoc 0.01",
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.8066107548100642,
+      "recall_1": 0.9700472842990957,
+      "f1_1": 0.8808116755909625,
+      "precision_0": 0.5753250063726739,
+      "recall_0": 0.14855525570986639,
+      "f1_0": 0.23613726721071354,
+      "balanced_accuracy": 0.559301270004481,
+      "macro_f1": 0.5584744714008381,
+      "pr_auc": 0.9193288083165801,
+      "accuracy": 0.7937978365859858
+    },
+    "at_p_star": {
+      "threshold": 0.69,
+      "precision_1": 0.8577994559609793,
+      "recall_1": 0.8220815878894662,
+      "f1_1": 0.839560802746819,
+      "precision_0": 0.43480495745045405,
+      "recall_0": 0.5010860264595537,
+      "f1_0": 0.46559843434652315,
+      "balanced_accuracy": 0.6615838071745099,
+      "macro_f1": 0.652579618546671,
+      "pr_auc": 0.9193288083165801,
+      "accuracy": 0.7532126415680516
+    }
+  },
+  "cv_10fold": {
+    "rmse_mean": 0.379302528563514,
+    "rmse_std": 0.0007065804542647247,
+    "auc_mean": 0.7607973762337461,
+    "auc_std": 0.002911581203758071,
+    "rmse_folds": [
+      0.3799282469850703,
+      0.3795966146327276,
+      0.3800224664711041,
+      0.37920443153334144,
+      0.3781994620171627,
+      0.380171528402489,
+      0.37895905752905806,
+      0.37797555493355683,
+      0.3792968361448341,
+      0.37967108698579577
+    ],
+    "auc_folds": [
+      0.7577804755918707,
+      0.7594747877328566,
+      0.75936957993238,
+      0.7624532449645222,
+      0.7633810830346465,
+      0.7573539821941897,
+      0.76600910794573,
+      0.7644934140187389,
+      0.7578196862879948,
+      0.759838400634531
+    ],
+    "std_ddof": 0,
+    "oof_macro_f1_at_p_star": 0.6529553090301172,
+    "oof_macro_f1_at_0.5": 0.5616558041191684
+  },
+  "baseline_test": {
+    "p": 0.7855,
+    "rmse": 0.41050839369333514,
+    "mse": 0.16851714129268225,
+    "mae": 0.3370068912926823,
+    "r2": -1.3655536701406845e-08,
+    "roc_auc": 0.5
+  },
+  "intercept": 2.1047681080246243,
+  "top15_coef": {
+    "featureunion__pipeline-1__remove_count_sp_0": 6.426532423247027,
+    "featureunion__pipeline-1__remove_count_sp_6": 3.9668886897166105,
+    "featureunion__pipeline-1__max_price_bucket_sp_7": 3.618277828758386,
+    "featureunion__pipeline-2__detail_count session_duration": -3.2218491616579574,
+    "featureunion__pipeline-1__detail_count_sp_6": 3.201169491305404,
+    "featureunion__pipeline-1__remove_count_sp_4": -3.0752670192160108,
+    "featureunion__pipeline-1__avg_dwell_time_sp_1": 3.005093373484531,
+    "featureunion__pipeline-1__remove_count_sp_1": -2.8904563401067453,
+    "featureunion__pipeline-1__remove_count_sp_3": -2.509940417839224,
+    "featureunion__pipeline-2__detail_count": 2.38914086767664,
+    "featureunion__pipeline-1__session_duration_sp_2": 2.319377028059226,
+    "featureunion__pipeline-1__unique_products_viewed_sp_1": 2.27932058659862,
+    "featureunion__pipeline-1__view_count_sp_2": -2.262660374558076,
+    "featureunion__pipeline-1__unique_categories_viewed_sp_1": 2.251098948566446,
+    "featureunion__pipeline-1__add_to_detail_ratio_sp_1": 2.2140222877478095
+  },
+  "converged": true,
+  "runtime": {
+    "tuning_s": 2138.754366408,
+    "oof_s": 125.25719472600031,
+    "sklearn": "1.6.1",
+    "python": "3.13.18",
+    "machine": "kaggle"
+  },
+  "notebook": "case2_logistic_regression_tu.py",
+  "notes": "LogReg khong co trong bang phan cong CONTRIBUTING; ap dung dung quy trinh cua RF/XGBoost (RandomizedSearchCV n_iter=30, random_state=42, PredefinedSplit). Khong gian tham so: C ~ loguniform(1e-3, 1e3); tien xu ly co dinh = ban tot nhat truoc do (spline + tuong tac); solver lbfgs, max_iter 3000, class_weight=None. Tuning dung muc 5 CONTRIBUTING (RMSE_PROBA, refit theo RMSE). p* chon tren OOF train de toi da macro-F1; test chi du doan 1 lan sau refit. Chay tren Kaggle (CPU), phien ban sklearn ghi trong runtime."
+}
