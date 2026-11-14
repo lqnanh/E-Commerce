@@ -2,22 +2,42 @@
   "case": "case1",
   "model": "ols",
   "author": "kiet",
-  "features": ["add_count", "remove_count", "view_count", "add_to_detail_ratio",
-               "search_count", "unique_categories_viewed", "avg_price_bucket",
-               "avg_dwell_time", "session_duration", "hod", "dow"],
+  "features": [
+    "add_count",
+    "remove_count",
+    "view_count",
+    "add_to_detail_ratio",
+    "search_count",
+    "unique_categories_viewed",
+    "avg_price_bucket",
+    "avg_dwell_time",
+    "session_duration",
+    "hod",
+    "dow"
+  ],
   "n_features": 11,
-  "split": "train_test_split test_size=0.2, stratify=SCA, random_state=42 (sau drop_duplicates + dropna: 143561 dòng -> train 114848 / test 28713). hod mã hoá sin/cos, dow dummy (bỏ nhóm gốc)",
-  "best_params": {"type": "Linear Probability Model", "se": "HC3 robust", "pred_clip": [0, 1]},
-  "metrics_test": {
-    "rmse": 0.401417,
-    "mse": 0.161136,
-    "mae": 0.323495,
-    "r2": 0.044217
+  "split": "Provided train.csv (143,771 rows) / test.csv (70,814 rows); seed=42. Ten-fold CV on train using the shared fold assignments (train_folds.csv). Test used only once.",
+  "best_params": {
+    "type": "Linear Probability Model",
+    "se": "HC3 robust",
+    "pred_clip": [
+      0,
+      1
+    ],
+    "impute": "median (fit on train)",
+    "hod": "sin/cos",
+    "dow": "dummy, base=1"
   },
-  "cv_5fold": {
-    "rmse_mean": 0.401607,
-    "rmse_std": 0.000775
+  "metrics_test": {
+    "rmse": 0.4016437971481342,
+    "mse": 0.16131773978757155,
+    "mae": 0.3233653567595987,
+    "r2": 0.042722059293222814
+  },
+  "cv_10fold": {
+    "rmse_mean": 0.4015054554449245,
+    "rmse_std": 0.000824293741432073
   },
   "notebook": "notebooks/case1_ols_kiet.py",
-  "notes": "Train R2=0.0413, Adj R2=0.0411. Test AUC=0.6610, Accuracy=0.7841, F1=0.8785 (ngưỡng 0.5). CV: StratifiedKFold 5, shuffle, seed 42 trên tập train. Hệ số, VIF, metrics chi tiết trong results/case1/ols_kiet/"
+  "notes": "Train R2=0.041519, Adj R2=0.041405. Mean CV MSE=0.161207; mean CV MAE=0.323151. Test ROC-AUC=0.659420, accuracy=0.783320, precision=0.786975, recall=0.992898, f1=0.878025 (cutoff 0.50). All rows kept (no dedup/dropna) to match shared folds and test set; missing avg_price_bucket imputed with train median. Coefficients, VIF, per-fold CV in results/case1/ols_kiet/."
 }
