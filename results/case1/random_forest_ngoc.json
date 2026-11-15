@@ -1,0 +1,78 @@
+{
+  "case": "case1",
+  "model": "random_forest",
+  "author": "ngoc",
+  "features": [
+    "add_count",
+    "remove_count",
+    "view_count",
+    "add_to_detail_ratio",
+    "search_count",
+    "unique_categories_viewed",
+    "avg_price_bucket",
+    "avg_dwell_time",
+    "session_duration",
+    "hod",
+    "dow"
+  ],
+  "n_features": 11,
+  "split": "data/train_folds.csv (143,771) / data/test.csv (70,814), không chia lại, không xoá dòng; CV 10-fold theo cột fold (PredefinedSplit); seed 42; test dùng một lần sau tuning",
+  "best_params": {
+    "n_estimators": 500,
+    "min_samples_split": 20,
+    "min_samples_leaf": 5,
+    "max_features": 0.3,
+    "max_depth": 20,
+    "class_weight": null
+  },
+  "metrics_test": {
+    "rmse": 0.37929014823998264,
+    "mse": 0.143861016551908,
+    "mae": 0.2912304201824274,
+    "r2": 0.14631225397689296,
+    "roc_auc": 0.7569201997127618
+  },
+  "metrics_class": {
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.8041657434079327,
+      "recall_1": 0.9787310548174251,
+      "f1_1": 0.8829024619676279,
+      "precision_0": 0.6207117665918563,
+      "recall_0": 0.12742710458763903,
+      "f1_0": 0.21144604630843164,
+      "balanced_accuracy": 0.553079079702532,
+      "macro_f1": 0.5471742541380298,
+      "pr_auc": 0.918560387110387,
+      "accuracy": 0.7960855198124664
+    },
+    "at_p_star": {
+      "threshold": 0.69,
+      "precision_1": 0.8551794491328943,
+      "recall_1": 0.8289494974919545,
+      "f1_1": 0.8418602103418055,
+      "precision_0": 0.4370081069885792,
+      "recall_0": 0.48607911538208387,
+      "f1_0": 0.46023931197806306,
+      "balanced_accuracy": 0.6575143064370191,
+      "macro_f1": 0.6510497611599343,
+      "pr_auc": 0.918560387110387,
+      "accuracy": 0.7553873527833479
+    }
+  },
+  "cv_10fold": {
+    "rmse_mean": 0.3791462769696629,
+    "rmse_std": 0.0006985612860742468,
+    "auc_mean": 0.7577652563909696,
+    "auc_std": 0.0026406376928928554
+  },
+  "baseline_test": {
+    "rmse": 0.41050839089342783,
+    "mse": 0.16851713899391133,
+    "mae": 0.3370351662740671,
+    "r2": -1.4366730027859376e-11,
+    "roc_auc": 0.5
+  },
+  "notebook": "notebooks/case1_rf_ngoc.py",
+  "notes": "Chạy trên Kaggle. RandomForestClassifier, predict_proba[:,1]. Pipeline: SimpleImputer(median) -> RF. Random search n_iter=30: ParameterSampler(random_state=42) + vòng CV 10 fold tự viết (tương đương RandomizedSearchCV, thêm checkpoint từng cấu hình để chạy nhiều phiên Kaggle), chọn theo RMSE trên xác suất trung bình 10 fold, refit trên toàn bộ train. Không gian: {\"n_estimators\": [\"200\", \"300\", \"500\"], \"max_depth\": [\"None\", \"10\", \"15\", \"20\", \"30\"], \"min_samples_leaf\": [\"1\", \"5\", \"10\", \"20\", \"35\", \"50\"], \"min_samples_split\": [\"2\", \"10\", \"20\"], \"max_features\": [\"sqrt\", \"0.3\", \"0.5\", \"0.7\", \"1.0\"], \"class_weight\": [\"None\", \"balanced_subsample\"]}. hod, dow giữ dạng số. p* = 0.69 chọn trên OOF train (tối đa macro-F1). Top importance (impurity): view_count, session_duration, avg_dwell_time, remove_count, add_to_detail_ratio. Top mean |SHAP| (lớp SCA=1, mẫu 5.000 dòng train, random_state=42): add_to_detail_ratio, view_count, avg_price_bucket, remove_count, unique_categories_viewed. Chi tiết trong results/case1/random_forest_ngoc/."
+}
