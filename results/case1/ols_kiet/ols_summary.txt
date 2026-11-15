@@ -1,0 +1,93 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.042
+Model:                            OLS   Adj. R-squared:                  0.041
+Method:                 Least Squares   F-statistic:                     264.0
+Date:                Sun, 15 Nov 2026   Prob (F-statistic):               0.00
+Time:                        11:39:51   Log-Likelihood:                -72946.
+No. Observations:              143771   AIC:                         1.459e+05
+Df Residuals:                  143753   BIC:                         1.461e+05
+Df Model:                          17                                         
+Covariance Type:                  HC3                                         
+============================================================================================
+                               coef    std err          z      P>|z|      [0.025      0.975]
+--------------------------------------------------------------------------------------------
+const                        0.8290      0.006    147.266      0.000       0.818       0.840
+add_count                    0.0143      0.001     11.561      0.000       0.012       0.017
+remove_count                -0.0070      0.000    -16.281      0.000      -0.008      -0.006
+view_count                  -0.0024      0.000    -22.096      0.000      -0.003      -0.002
+add_to_detail_ratio         -0.0970      0.007    -13.864      0.000      -0.111      -0.083
+search_count                 0.0009      0.001      0.827      0.408      -0.001       0.003
+unique_categories_viewed     0.0482      0.001     33.579      0.000       0.045       0.051
+avg_price_bucket            -0.0047      0.000    -11.373      0.000      -0.006      -0.004
+avg_dwell_time               0.0003   1.71e-05     17.171      0.000       0.000       0.000
+session_duration         -2.088e-05   1.84e-06    -11.371      0.000   -2.45e-05   -1.73e-05
+hod_sin                      0.0204      0.002     12.300      0.000       0.017       0.024
+hod_cos                      0.0323      0.002     19.461      0.000       0.029       0.036
+dow_2                       -0.0053      0.004     -1.299      0.194      -0.013       0.003
+dow_3                        0.0022      0.004      0.527      0.598      -0.006       0.010
+dow_4                        0.0229      0.004      5.846      0.000       0.015       0.031
+dow_5                        0.0091      0.004      2.276      0.023       0.001       0.017
+dow_6                        0.0134      0.004      3.362      0.001       0.006       0.021
+dow_7                        0.0101      0.004      2.605      0.009       0.003       0.018
+==============================================================================
+Omnibus:                    24518.165   Durbin-Watson:                   2.004
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            39910.243
+Skew:                          -1.290   Prob(JB):                         0.00
+Kurtosis:                       3.038   Cond. No.                     1.01e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC3)
+[2] The condition number is large, 1.01e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+(R2 trong summary là R2 trên train, KHÔNG dùng để so sánh)
+
+VIF
+view_count                  3.33
+session_duration            2.89
+dow_7                       1.78
+dow_4                       1.74
+dow_5                       1.71
+dow_6                       1.71
+dow_2                       1.70
+dow_3                       1.66
+add_count                   1.64
+unique_categories_viewed    1.59
+avg_dwell_time              1.55
+add_to_detail_ratio         1.43
+search_count                1.16
+remove_count                1.15
+hod_sin                     1.12
+hod_cos                     1.12
+avg_price_bucket            1.06
+
+CV 10-fold
+ fold    rmse     mse     mae      r2  roc_auc
+    0 0.40204 0.16164 0.32357 0.04088  0.65497
+    1 0.40080 0.16064 0.32281 0.04686  0.66221
+    2 0.40244 0.16196 0.32408 0.03904  0.65488
+    3 0.40000 0.16000 0.32196 0.05065  0.66776
+    4 0.40094 0.16075 0.32303 0.04619  0.66232
+    5 0.40243 0.16195 0.32408 0.03905  0.66064
+    6 0.40259 0.16208 0.32409 0.03806  0.65672
+    7 0.40103 0.16083 0.32228 0.04552  0.66413
+    8 0.40174 0.16140 0.32294 0.04213  0.66131
+    9 0.40104 0.16084 0.32267 0.04545  0.66388
+
+p* = 0.76
+
+Test
+rmse       0.40164
+mse        0.16132
+mae        0.32337
+r2         0.04272
+roc_auc    0.65942
+
+Baseline (luôn dự đoán 0.7855)
+rmse       0.41051
+mse        0.16852
+mae        0.33704
+r2        -0.00000
+roc_auc    0.50000
