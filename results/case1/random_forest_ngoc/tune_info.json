@@ -1,0 +1,29 @@
+{
+  "best_candidate": 16,
+  "best_params": {
+    "n_estimators": 500,
+    "min_samples_split": 20,
+    "min_samples_leaf": 5,
+    "max_features": 0.3,
+    "max_depth": 20,
+    "class_weight": null
+  },
+  "cv_10fold": {
+    "rmse_mean": 0.3791462769696629,
+    "rmse_std": 0.0006985612860742468,
+    "auc_mean": 0.7577652563909696,
+    "auc_std": 0.0026406376928928554
+  },
+  "p_star": 0.69,
+  "oof_macro_f1_at_p_star": 0.6517471185522865,
+  "oof_prob_metrics": {
+    "rmse": 0.37914692313233006,
+    "mse": 0.143752389320713,
+    "mae": 0.2911135033846624,
+    "r2": 0.14696135694889667,
+    "roc_auc": 0.7577258368111213
+  },
+  "total_fit_time_s": 69613.41399242099,
+  "refit_time_s": 59.323008285999094,
+  "mean_fit_time_per_fold_s": 206.61490019339962
+}
