@@ -2,22 +2,70 @@
   "case": "case1",
   "model": "ols",
   "author": "kiet",
-  "features": ["add_count", "remove_count", "view_count", "add_to_detail_ratio",
-               "search_count", "unique_categories_viewed", "avg_price_bucket",
-               "avg_dwell_time", "session_duration", "hod", "dow"],
+  "features": [
+    "add_count",
+    "remove_count",
+    "view_count",
+    "add_to_detail_ratio",
+    "search_count",
+    "unique_categories_viewed",
+    "avg_price_bucket",
+    "avg_dwell_time",
+    "session_duration",
+    "hod",
+    "dow"
+  ],
   "n_features": 11,
-  "split": "train_test_split test_size=0.2, stratify=SCA, random_state=42 (sau drop_duplicates + dropna: 143561 dòng -> train 114848 / test 28713). hod mã hoá sin/cos, dow dummy (bỏ nhóm gốc)",
-  "best_params": {"type": "Linear Probability Model", "se": "HC3 robust", "pred_clip": [0, 1]},
+  "split": "data/train_folds.csv (143,771) / data/test.csv (70,814), khong chia lai, khong xoa dong; CV 10-fold theo cot fold (PredefinedSplit); seed 42",
+  "best_params": {},
   "metrics_test": {
-    "rmse": 0.401417,
-    "mse": 0.161136,
-    "mae": 0.323495,
-    "r2": 0.044217
+    "rmse": 0.4016437971481345,
+    "mse": 0.1613177397875718,
+    "mae": 0.3233653567595875,
+    "r2": 0.04272205929322137,
+    "roc_auc": 0.6594203087802916
   },
-  "cv_5fold": {
-    "rmse_mean": 0.401607,
-    "rmse_std": 0.000775
+  "metrics_class": {
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.7869754185963662,
+      "recall_1": 0.9928983657251758,
+      "f1_1": 0.878024738465452,
+      "precision_0": 0.38184663536776214,
+      "recall_0": 0.01606002764430988,
+      "f1_0": 0.030823648307225872,
+      "balanced_accuracy": 0.5044791966847428,
+      "macro_f1": 0.45442419338633894,
+      "pr_auc": 0.8690640293059291,
+      "accuracy": 0.7833196825486486
+    },
+    "at_p_star": {
+      "threshold": 0.76,
+      "precision_1": 0.8310703105494632,
+      "recall_1": 0.7779975189227091,
+      "f1_1": 0.8036586498282106,
+      "precision_0": 0.34126433715657506,
+      "recall_0": 0.4210491673797143,
+      "f1_0": 0.3769815545995639,
+      "balanced_accuracy": 0.5995233431512117,
+      "macro_f1": 0.5903201022138872,
+      "pr_auc": 0.8690640293059291,
+      "accuracy": 0.7014149744400825
+    }
   },
-  "notebook": "notebooks/case1_ols_kiet.py",
-  "notes": "Train R2=0.0413, Adj R2=0.0411. Test AUC=0.6610, Accuracy=0.7841, F1=0.8785 (ngưỡng 0.5). CV: StratifiedKFold 5, shuffle, seed 42 trên tập train. Hệ số, VIF, metrics chi tiết trong results/case1/ols_kiet/"
+  "cv_10fold": {
+    "rmse_mean": 0.4015054554449245,
+    "rmse_std": 0.0008242937414321393,
+    "auc_mean": 0.6608826940561645,
+    "auc_std": 0.003991127194415334
+  },
+  "baseline_test": {
+    "rmse": 0.4105083908934278,
+    "mse": 0.1685171389939113,
+    "mae": 0.33703516627406716,
+    "r2": -1.436650798325445e-11,
+    "roc_auc": 0.5
+  },
+  "notebook": "notebooks/case1_ols_kiet.ipynb",
+  "notes": "Linear Probability Model (statsmodels OLS, cov_type='HC3'), khong tuning nen best_params rong. Bien doi: hod -> sin/cos(2*pi*hod/24); dow -> one-hot (bo dow=1 lam nhom goc). SimpleImputer(median) trong Pipeline cho cac bien so (chi avg_price_bucket co thieu). Du doan cat ve [0, 1] truoc khi tinh moi metric; 0.40% du doan test nam ngoai [0, 1] truoc khi cat. p* tim tren luoi 0.010-0.995 buoc 0.005, toi da macro-F1 tren OOF train (p*=0.76). Baseline = ti le SCA=1 cua train (0.785450). Train R2 (statsmodels) = 0.041519, chi de tham khao. He so HC3, VIF, CV tung fold, luoi p* trong results/case1/ols_kiet/."
 }
