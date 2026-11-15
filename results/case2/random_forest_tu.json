@@ -1,0 +1,157 @@
+{
+  "case": "case2",
+  "model": "random_forest",
+  "author": "tu",
+  "features": [
+    "add_count",
+    "remove_count",
+    "view_count",
+    "detail_count",
+    "add_to_detail_ratio",
+    "search_count",
+    "unique_categories_viewed",
+    "avg_price_bucket",
+    "max_price_bucket",
+    "unique_products_viewed",
+    "avg_dwell_time",
+    "session_duration",
+    "hod",
+    "dow"
+  ],
+  "n_features": 14,
+  "n_train": 143771,
+  "n_test": 70814,
+  "split": "data/train_folds.csv (143,771) / data/test.csv (70,814), khong chia lai, khong xoa dong; CV 10-fold theo cot fold (PredefinedSplit); seed 42",
+  "preprocessing": "SimpleImputer(median) trong Pipeline (fit lai moi fold); khong bien doi bien khac",
+  "tuning": "RandomizedSearchCV(n_iter=30, random_state=42, cv=PredefinedSplit(train['fold']), scoring={'rmse': RMSE_PROBA, 'auc': 'roc_auc'}, refit='rmse'), refit tren toan bo train",
+  "param_distributions": {
+    "clf__max_features": [
+      "sqrt",
+      0.3,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "clf__min_samples_leaf": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      35,
+      50,
+      75,
+      100
+    ]
+  },
+  "best_params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 42,
+    "min_samples_leaf": 20,
+    "max_features": 0.3
+  },
+  "metrics_test": {
+    "rmse": 0.37780247654201643,
+    "mse": 0.14273471128128087,
+    "mae": 0.2889544698268472,
+    "r2": 0.15299587842819573,
+    "roc_auc": 0.7641758071520545
+  },
+  "metrics_class": {
+    "p_star": 0.69,
+    "p_star_rule": "max macro-F1 tren OOF train, nguong 0.01-0.99 buoc 0.01",
+    "at_0.5": {
+      "threshold": 0.5,
+      "precision_1": 0.8058190454984042,
+      "recall_1": 0.975962316391291,
+      "f1_1": 0.8827671442277983,
+      "precision_0": 0.612351406204697,
+      "recall_0": 0.13901138682287895,
+      "f1_0": 0.22658513035082073,
+      "balanced_accuracy": 0.557486851607085,
+      "macro_f1": 0.5546761372893095,
+      "pr_auc": 0.9216962018662337,
+      "accuracy": 0.796396192843223
+    },
+    "at_p_star": {
+      "threshold": 0.69,
+      "precision_1": 0.8598964974124353,
+      "recall_1": 0.8245087287175707,
+      "f1_1": 0.8418308812056575,
+      "precision_0": 0.4416542729664798,
+      "recall_0": 0.5081945632857237,
+      "f1_0": 0.4725937260902831,
+      "balanced_accuracy": 0.6663516460016472,
+      "macro_f1": 0.6572123036479703,
+      "pr_auc": 0.9216962018662337,
+      "accuracy": 0.7566441664077724
+    }
+  },
+  "cv_10fold": {
+    "rmse_mean": 0.3775408466939847,
+    "rmse_std": 0.0007952144190131991,
+    "auc_mean": 0.7657937750637023,
+    "auc_std": 0.002932059513514397,
+    "rmse_folds": [
+      0.37829212883690855,
+      0.3770706022877235,
+      0.3782292650768782,
+      0.37667877069033306,
+      0.3766632026742601,
+      0.3791867404563049,
+      0.37748237977485266,
+      0.37708480792525156,
+      0.3768286880598355,
+      0.37789188115749867
+    ],
+    "auc_folds": [
+      0.7638562118987379,
+      0.7677029276187557,
+      0.76372394851047,
+      0.7694898813921993,
+      0.7677710758638665,
+      0.75947645268577,
+      0.7669963562244807,
+      0.7688181722019873,
+      0.7666500361839337,
+      0.7634526880568211
+    ],
+    "std_ddof": 0,
+    "oof_macro_f1_at_p_star": 0.6567123885934506,
+    "oof_macro_f1_at_0.5": 0.5525205622887319
+  },
+  "baseline_test": {
+    "p": 0.7855,
+    "rmse": 0.41050839369333514,
+    "mse": 0.16851714129268225,
+    "mae": 0.3370068912926823,
+    "r2": -1.3655536701406845e-08,
+    "roc_auc": 0.5
+  },
+  "feature_importance": {
+    "view_count": 0.1707348820429029,
+    "remove_count": 0.1416428459144019,
+    "session_duration": 0.11976776387922639,
+    "avg_dwell_time": 0.10572577021149315,
+    "add_to_detail_ratio": 0.06763995980368795,
+    "avg_price_bucket": 0.06612603699984072,
+    "unique_products_viewed": 0.05973440737517492,
+    "hod": 0.056894011836545466,
+    "max_price_bucket": 0.05666494868144538,
+    "detail_count": 0.052341461228003525,
+    "dow": 0.033447710002030034,
+    "add_count": 0.03005380258689295,
+    "search_count": 0.02117697974459755,
+    "unique_categories_viewed": 0.018049419693757188
+  },
+  "runtime": {
+    "tuning_s": 11070.886125945,
+    "oof_s": 253.6252151560002,
+    "sklearn": "1.6.1",
+    "python": "3.13.18",
+    "machine": "kaggle"
+  },
+  "notebook": "case2_random_forest_tu.py",
+  "notes": "Khong gian tham so RF: max_features {sqrt,0.3,0.5,0.7,0.9} x min_samples_leaf {5,10,15,20,25,35,50,75,100} (45 to hop, lay ngau nhien 30); n_estimators co dinh 200; class_weight=None. Bo min_samples_leaf 1-3 vi lan truoc kem ro va cay qua lon so voi RAM may. Tuning dung muc 5 CONTRIBUTING (RMSE_PROBA, refit theo RMSE). p* chon tren OOF train (cung 10 fold) de toi da macro-F1; test chi du doan 1 lan sau refit. Chay tren Kaggle (CPU), phien ban sklearn ghi trong runtime. Thay ban cu (GridSearchCV 9 cau hinh, scoring roc_auc, Kaggle sklearn 1.6.1)."
+}
