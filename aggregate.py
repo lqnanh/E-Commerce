@@ -7,7 +7,9 @@ import pandas as pd
 rows = []
 for p in sorted(Path("results").rglob("*.json")):
     d = json.loads(p.read_text(encoding="utf-8"))
-    m = d.get("metrics_test", {})
+    if not isinstance(d, dict) or "metrics_test" not in d:
+        continue  # bỏ qua file phụ (tune_info.json, checkpoint CV...)
+    m = d["metrics_test"]
     rows.append({
         "case": d.get("case"),
         "model": d.get("model"),
