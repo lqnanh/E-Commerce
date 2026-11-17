@@ -10,3 +10,6 @@ __pycache__/
 # File nặng sinh lại được bằng script (model đã fit, checkpoint CV)
 results/**/*.joblib
 results/**/cv_parts/
+
+# Báo cáo / bài báo
+report/

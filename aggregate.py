@@ -7,6 +7,8 @@ import pandas as pd
 rows = []
 for p in sorted(Path("results").rglob("*.json")):
     d = json.loads(p.read_text(encoding="utf-8"))
+    if not isinstance(d, dict) or "metrics_test" not in d:
+        continue  # bỏ qua tune_info.json, checkpoint CV...
     m = d.get("metrics_test", {})
     cv = d.get("cv_10fold", {})          # file chưa theo quy ước (vd. cv_5fold) sẽ để trống
     rows.append({
