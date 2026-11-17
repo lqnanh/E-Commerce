@@ -1,0 +1,6 @@
+hypothesis,feature,expected,OLS (C1),RF (C1),RF (C2)
+H1a,view_count,-,- (-1.00) OK,- (-0.84) OK,- (-0.87) OK
+H1a,session_duration,-,- (-1.00) OK,- (-0.87) OK,- (-0.90) OK
+H1b,unique_categories_viewed,+,+ (+1.00) OK,+ (+0.76) OK,+ (+0.74) OK
+H1b,unique_products_viewed,+,n/a,n/a,+ (+0.90) OK
+H2,add_count,+,+ (+1.00) OK,+ (+0.35) OK,- (-0.40) X

@@ -1,0 +1,3 @@
+group,mean_abs_group_shap,sum_of_member_mean_abs,mean_abs_view_count,mean_abs_detail_count,mean_abs_unique_products_viewed,mean_abs_avg_price_bucket,mean_abs_max_price_bucket
+browsing (view_count + detail_count + unique_products_viewed),0.05906072652995485,0.09457626295374286,0.04982277089896944,0.01889827458750511,0.025855217467268307,,
+price (avg_price_bucket + max_price_bucket),0.04197341010541625,0.046388169924356334,,,,0.023639351862195634,0.022748818062160704

@@ -1,0 +1,32 @@
+{
+  "sample": "train_folds.sample(5000, random_state=42)",
+  "spearman_case1_importance": {
+    "OLS vs RF": 0.6363636363636364,
+    "OLS vs XGBoost": 0.7000000000000001,
+    "RF vs XGBoost": 0.9636363636363637
+  },
+  "top5_case1": {
+    "OLS": [
+      "view_count",
+      "unique_categories_viewed",
+      "add_to_detail_ratio",
+      "hod",
+      "remove_count"
+    ],
+    "RF": [
+      "add_to_detail_ratio",
+      "view_count",
+      "avg_price_bucket",
+      "remove_count",
+      "unique_categories_viewed"
+    ],
+    "XGBoost": [
+      "view_count",
+      "add_to_detail_ratio",
+      "avg_price_bucket",
+      "remove_count",
+      "unique_categories_viewed"
+    ]
+  },
+  "sign_agreement_OLS_vs_RF1": "7/9"
+}
