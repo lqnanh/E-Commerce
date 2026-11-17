@@ -29,8 +29,29 @@
     ]
   },
   "sign_agreement_OLS_vs_RF1": "7/9",
-  "xgboost_direction_from": [
-    "XGB1_dir"
-  ],
-  "sign_agreement_OLS_vs_XGB1": "8/9"
+  "xgboost_direction_from": {
+    "XGB1_dir": "case1_xgb_lam",
+    "XGB2_dir": "case2_xgb_refit"
+  },
+  "case2_rf_vs_xgboost_sample5000": {
+    "spearman_feature": 0.8461538461538461,
+    "spearman_grouped": 0.9454545454545454,
+    "top5_RF": [
+      "view_count",
+      "remove_count",
+      "unique_products_viewed",
+      "add_to_detail_ratio",
+      "avg_price_bucket"
+    ],
+    "top5_XGBoost": [
+      "view_count",
+      "detail_count",
+      "avg_price_bucket",
+      "unique_products_viewed",
+      "remove_count"
+    ],
+    "sign_agreement_RF2_vs_XGB2": "12/12"
+  },
+  "sign_agreement_OLS_vs_XGB1": "8/9",
+  "sign_agreement_OLS_vs_XGB2": "7/9"
 }

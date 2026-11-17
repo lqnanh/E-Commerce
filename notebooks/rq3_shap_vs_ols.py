@@ -167,14 +167,23 @@ def step_analyze():
     dir2 = pd.Series({f: direction(Xs2[f], rf2[f]) for f in num2}, name="RF2_dir")
     dirs = dir1.join(dir2, how="outer")
     # XGBoost: SHAP OOF (log-odds) tren toan bo train, thu tu dong = train_folds.csv -> lay dung 5,000 dong mau
-    xgb_cols = []
-    for col, prefix, num in [("XGB1_dir", "case1_xgb_lam", num1), ("XGB2_dir", "case2_xgb_tran", num2)]:
-        sv = load_xgb_oof(prefix, tr, s.index)
+    xgb_cols, xgb_src, xgb_sv = [], {}, {}
+    # Case 2: file OOF cua Tran (Kaggle) neu co, neu khong dung ban tinh lai scripts/case2_xgb_oof_shap_refit.py
+    for col, prefixes, num in [("XGB1_dir", ["case1_xgb_lam"], num1),
+                               ("XGB2_dir", ["case2_xgb_tran", "case2_xgb_refit"], num2)]:
+        sv, used = None, None
+        for prefix in prefixes:
+            sv = load_xgb_oof(prefix, tr, s.index)
+            if sv is not None:
+                used = prefix
+                break
         if sv is None:
-            print(f"!! chua co {prefix}_shap_oof.csv.gz -> bo qua {col}")
+            print(f"!! chua co SHAP OOF cho {col} -> bo qua")
             continue
         dirs[col] = pd.Series({f: direction(sv[1].loc[s.index, f], sv[0].loc[s.index, f]) for f in num})
         xgb_cols.append(col)
+        xgb_src[col] = used
+        xgb_sv[col] = sv[0].loc[s.index]
     dirs = dirs.loc[num2]
     dirs.to_csv(OUT / "direction_by_feature.csv")
     sign_agree = int((np.sign(dirs.OLS_dir) == np.sign(dirs.RF1_dir)).sum())
@@ -211,10 +220,27 @@ def step_analyze():
     grp.to_csv(OUT / "case2_rf_group_shap.csv", index=False)
     gimp.rename("mean_abs_shap").to_csv(OUT / "case2_rf_grouped_importance.csv")
 
+    # ---- 5. Case 2: RF vs XGBoost (cung 5,000 dong mau), tung bien va theo nhom
+    case2_cmp = None
+    if "XGB2_dir" in xgb_sv:
+        x2 = xgb_sv["XGB2_dir"][C2]
+        imp2 = pd.DataFrame({"RF": rf2.abs().mean(), "XGBoost": x2.abs().mean()})
+        g_rf = pd.concat([pd.Series({g: rf2[fs].sum(1).abs().mean() for g, fs in GROUPS.items()}), rf2[rest].abs().mean()])
+        g_x = pd.concat([pd.Series({g: x2[fs].sum(1).abs().mean() for g, fs in GROUPS.items()}), x2[rest].abs().mean()])
+        gimp2 = pd.DataFrame({"RF": g_rf, "XGBoost": g_x})
+        for t, name in [(imp2, "case2_importance_rank.csv"), (gimp2, "case2_grouped_importance_rank.csv")]:
+            t[["rank_RF", "rank_XGBoost"]] = t[["RF", "XGBoost"]].rank(ascending=False, method="min").astype(int)
+            t.sort_values("rank_RF").to_csv(OUT / name)
+        case2_cmp = {"spearman_feature": spearmanr(imp2.RF, imp2.XGBoost).statistic,
+                     "spearman_grouped": spearmanr(gimp2.RF, gimp2.XGBoost).statistic,
+                     "top5_RF": list(imp2.RF.nlargest(5).index), "top5_XGBoost": list(imp2.XGBoost.nlargest(5).index),
+                     "sign_agreement_RF2_vs_XGB2": f"{int((np.sign(dirs.RF2_dir) == np.sign(dirs.XGB2_dir)).loc[num2].sum())}/{len(num2)}"}
+
     summary = {"sample": f"train_folds.sample({N}, random_state={SEED})",
                "spearman_case1_importance": rho, "top5_case1": top5,
                "sign_agreement_OLS_vs_RF1": f"{sign_agree}/{len(num1)}",
-               "xgboost_direction_from": xgb_cols or "chua co SHAP values -> doc tu beeswarm"}
+               "xgboost_direction_from": xgb_src or "chua co SHAP values -> doc tu beeswarm",
+               "case2_rf_vs_xgboost_sample5000": case2_cmp}
     for col in xgb_cols:
         summary[f"sign_agreement_OLS_vs_{col[:4]}"] = \
             f"{int((np.sign(dirs.OLS_dir) == np.sign(dirs[col])).loc[num1].sum())}/{len(num1)}"

@@ -1,0 +1,12 @@
+{
+  "source": "re-fit of Tran's XGBoost Case 2 (best_params from results/case2/xgboost_tran.json)",
+  "note": "close to but not bit-identical with Tran's Kaggle run",
+  "cv_rmse_mean_refit": 0.3750590668891838,
+  "cv_rmse_mean_tran": 0.3750037704635667,
+  "cv_auc_mean_refit": 0.7751455623998466,
+  "cv_auc_mean_tran": 0.7753614590706264,
+  "p_star_refit": 0.6900000000000001,
+  "p_star_tran": 0.6900000000000001,
+  "spearman_importance_vs_tran_oof": 1.0,
+  "max_abs_importance_diff_vs_tran_oof": 0.00658461091988502
+}
