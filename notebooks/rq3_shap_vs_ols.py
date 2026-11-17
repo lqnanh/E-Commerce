@@ -8,6 +8,7 @@ Mau: tr.sample(5000, random_state=42) - CUNG cac dong voi SHAP cua RF Case 1 (Ng
 OLS: SHAP cua mo hinh tuyen tinh = beta_j * (x_j - E[x_j]) (Lundberg & Lee, 2017), E lay tren toan bo train.
      hod (sin, cos) va dow (6 dummy) duoc cong lai thanh 1 gia tri cho moi bien goc truoc khi xep hang.
 Huong tac dong cua 1 bien = Spearman(gia tri bien, SHAP cua bien) tren mau: > 0 tang P(SCA=1), < 0 giam.
+XGBoost: doc shap_figures/case{1,2}_xgb_*_shap_oof.csv.gz (+ values_X) neu co, lay dung 5,000 dong mau.
 Ket qua ghi vao results/rq3/.
 """
 import json
@@ -113,6 +114,21 @@ def ols_shap(tr, s):
     return out[C1], b, p
 
 
+def load_xgb_oof(prefix, tr, idx):
+    """SHAP OOF cua XGBoost (pred_contribs, bo cot bias) + X da dien median; None neu chua co file."""
+    sp, xp = FIG / f"{prefix}_shap_oof.csv.gz", FIG / f"{prefix}_shap_oof_values_X.csv.gz"
+    if not xp.exists():
+        xp = FIG / f"{prefix}_shap_values_X.csv.gz"  # ten file cua Lam
+    if not (sp.exists() and xp.exists()):
+        return None
+    S, X = pd.read_csv(sp), pd.read_csv(xp)
+    assert len(S) == len(X) == len(tr) and list(S.columns) == list(X.columns)
+    # kiem tra thu tu dong trung train_folds.csv tren cac cot khong thieu
+    full = [c for c in X.columns if not tr[c].isna().any()]
+    assert np.allclose(X[full].values, tr[full].values, atol=1e-3), f"{prefix}: thu tu dong khac train_folds.csv"
+    return S, X
+
+
 def direction(x, phi):
     r = spearmanr(x, phi).statistic
     return float(r)
@@ -149,16 +165,29 @@ def step_analyze():
                          "OLS_dir": [direction(Xs1[f], ols[f]) for f in num1],
                          "RF1_dir": [direction(Xs1[f], rf1[f]) for f in num1]}, index=num1)
     dir2 = pd.Series({f: direction(Xs2[f], rf2[f]) for f in num2}, name="RF2_dir")
-    dirs = dir1.join(dir2, how="outer").loc[num2]
+    dirs = dir1.join(dir2, how="outer")
+    # XGBoost: SHAP OOF (log-odds) tren toan bo train, thu tu dong = train_folds.csv -> lay dung 5,000 dong mau
+    xgb_cols = []
+    for col, prefix, num in [("XGB1_dir", "case1_xgb_lam", num1), ("XGB2_dir", "case2_xgb_tran", num2)]:
+        sv = load_xgb_oof(prefix, tr, s.index)
+        if sv is None:
+            print(f"!! chua co {prefix}_shap_oof.csv.gz -> bo qua {col}")
+            continue
+        dirs[col] = pd.Series({f: direction(sv[1].loc[s.index, f], sv[0].loc[s.index, f]) for f in num})
+        xgb_cols.append(col)
+    dirs = dirs.loc[num2]
     dirs.to_csv(OUT / "direction_by_feature.csv")
     sign_agree = int((np.sign(dirs.OLS_dir) == np.sign(dirs.RF1_dir)).sum())
 
     # ---- 3. Bang gia thuyet
+    labels = [("OLS_dir", "OLS (C1)"), ("RF1_dir", "RF (C1)"), ("RF2_dir", "RF (C2)"),
+              ("XGB1_dir", "XGBoost (C1)"), ("XGB2_dir", "XGBoost (C2)")]
+    labels = [(c, lab) for c, lab in labels if c in dirs.columns]
     rows = []
     for h, feats in HYP.items():
         for f, exp in feats.items():
             row = {"hypothesis": h, "feature": f, "expected": "+" if exp > 0 else "-"}
-            for col, lab in [("OLS_dir", "OLS (C1)"), ("RF1_dir", "RF (C1)"), ("RF2_dir", "RF (C2)")]:
+            for col, lab in labels:
                 v = dirs.loc[f, col] if f in dirs.index else np.nan
                 if np.isnan(v):
                     row[lab] = "n/a"
@@ -184,7 +213,11 @@ def step_analyze():
 
     summary = {"sample": f"train_folds.sample({N}, random_state={SEED})",
                "spearman_case1_importance": rho, "top5_case1": top5,
-               "sign_agreement_OLS_vs_RF1": f"{sign_agree}/{len(num1)}"}
+               "sign_agreement_OLS_vs_RF1": f"{sign_agree}/{len(num1)}",
+               "xgboost_direction_from": xgb_cols or "chua co SHAP values -> doc tu beeswarm"}
+    for col in xgb_cols:
+        summary[f"sign_agreement_OLS_vs_{col[:4]}"] = \
+            f"{int((np.sign(dirs.OLS_dir) == np.sign(dirs[col])).loc[num1].sum())}/{len(num1)}"
     (OUT / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
 
     pd.set_option("display.width", 200)
