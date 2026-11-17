@@ -1,0 +1,15 @@
+feature,mean_abs_shap
+view_count,0.66685
+detail_count,0.233195
+avg_price_bucket,0.232126
+unique_products_viewed,0.218174
+remove_count,0.205386
+add_to_detail_ratio,0.177071
+max_price_bucket,0.15903
+session_duration,0.142091
+hod,0.102483
+unique_categories_viewed,0.08607
+avg_dwell_time,0.085698
+add_count,0.076007
+search_count,0.065781
+dow,0.035738
