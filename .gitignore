@@ -1,7 +1,13 @@
 data/raw/*
 !data/raw/.gitkeep
 *.csv.gz
+# SHAP values (.csv.gz) can de so sanh huong tac dong (RQ3) -> van commit
+!shap_figures/*.csv.gz
 *.parquet
+# Du lieu chia san (tai rieng, khong dua len GitHub)
+data/*.csv
+# File tong hop sinh lai bang aggregate.py
+summary.csv
 .ipynb_checkpoints/
 __pycache__/
 .venv/
