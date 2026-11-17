@@ -1,0 +1,69 @@
+{
+  "case": "case2",
+  "model": "random_forest",
+  "author": "tu",
+  "explainer": "shap.TreeExplainer(feature_perturbation='tree_path_dependent', model_output='raw' = xac suat)",
+  "target_class": "SCA = 1 (bo gio)",
+  "scale": "xac suat P(SCA=1)",
+  "model_source": "joblib: random_forest_tu.joblib (sklearn 1.6.1, khong train lai)",
+  "best_params": {
+    "n_estimators": 200,
+    "max_features": 0.3,
+    "min_samples_leaf": 20,
+    "class_weight": null,
+    "random_state": 42
+  },
+  "sample": {
+    "from": "train_folds.csv",
+    "n": 5000,
+    "random_state": 42,
+    "sca_rate": 0.7794,
+    "input": "da dien median (imputer cua Pipeline)"
+  },
+  "expected_value": 0.7854280070389715,
+  "mean_p_sample": 0.7799554522594426,
+  "additivity_max_abs_err": 1.8263168755083825e-14,
+  "impurity_vs_json_max_abs_diff": 0.0,
+  "mean_abs_shap": {
+    "view_count": 0.04982277089896949,
+    "remove_count": 0.030696089364365013,
+    "unique_products_viewed": 0.025855217467268397,
+    "add_to_detail_ratio": 0.02467111587634245,
+    "avg_price_bucket": 0.023639351862195672,
+    "session_duration": 0.02346267736267231,
+    "max_price_bucket": 0.022748818062160808,
+    "detail_count": 0.018898274587505134,
+    "avg_dwell_time": 0.012381406064773568,
+    "unique_categories_viewed": 0.009992275139209176,
+    "add_count": 0.00733630735174938,
+    "hod": 0.006600597961039957,
+    "search_count": 0.004223756088776782,
+    "dow": 0.0030899521655603068
+  },
+  "mean_shap": {
+    "view_count": -0.0010811985919690847,
+    "remove_count": 0.0018250197160095017,
+    "unique_products_viewed": -0.0025602980146537907,
+    "add_to_detail_ratio": -0.0006897086000998509,
+    "avg_price_bucket": -0.0018107706353224227,
+    "session_duration": -0.0008380497444812984,
+    "max_price_bucket": -0.00010448517465471785,
+    "detail_count": 0.0034606086211621183,
+    "avg_dwell_time": -0.0010387317846661753,
+    "unique_categories_viewed": -0.0012835239247815855,
+    "add_count": -0.001035346672026344,
+    "hod": 3.471478890245989e-05,
+    "search_count": -0.000410603978525304,
+    "dow": 5.981921557780741e-05
+  },
+  "runtime": {
+    "shap_s": 662.4452615999908,
+    "total_s": 671.8173097999825,
+    "n_jobs": 4,
+    "sklearn": "1.6.1",
+    "shap": "0.54.1",
+    "python": "3.13.12",
+    "machine": "local"
+  },
+  "notebook": "case2_random_forest_shap_tu.py"
+}
