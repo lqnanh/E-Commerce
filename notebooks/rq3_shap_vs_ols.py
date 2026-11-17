@@ -278,8 +278,8 @@ def step_plots():
     for r, j in enumerate(order, 1):
         f = C1[j]
         shap.dependence_plot(f, sv, Xs, interaction_index="auto", dot_size=8, alpha=0.5, show=False)
-        plt.ylabel(f"SHAP của {f} (thang xác suất P(SCA = 1))")
-        plt.title(f"RF Case 1 - dependence #{r}: {f} (n = {N:,} dòng train)")
+        plt.ylabel(f"SHAP value for {f}\n(probability scale, P(SCA = 1))")
+        plt.title(f"Random Forest, Case 1: {f} (n = {N:,} training sessions)")
         plt.gcf().savefig(FIG / f"case1_rf_ngoc_shap_dependence_{r:02d}_{f}.png", dpi=200, bbox_inches="tight")
         plt.close("all")
         print(f"{r:02d} {f}")
