@@ -2,6 +2,7 @@
 
     python notebooks/rq3_shap_vs_ols.py rf1      # tinh SHAP cho RF Case 1 (Ngoc) tren 5,000 dong train (lau)
     python notebooks/rq3_shap_vs_ols.py analyze  # bang xep hang, bang dau/huong, SHAP theo nhom (nhanh)
+    python notebooks/rq3_shap_vs_ols.py plots    # dependence plot cho 11 bien cua RF Case 1
 
 Mau: tr.sample(5000, random_state=42) - CUNG cac dong voi SHAP cua RF Case 1 (Ngoc) va RF Case 2 (Tu).
 OLS: SHAP cua mo hinh tuyen tinh = beta_j * (x_j - E[x_j]) (Lundberg & Lee, 2017), E lay tren toan bo train.
@@ -201,10 +202,36 @@ def step_analyze():
     print(gimp.round(4).to_string())
 
 
+def step_plots():
+    """Dependence plot cho moi bien cua RF Case 1 (tu case1_rf_ngoc_shap_values.csv), dat ten giong RF Case 2 (Tu)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import shap
+    tr, s = sample()
+    v = pd.read_csv(RF1_VALUES, index_col=0)
+    assert (v.index.values == s.index.values).all()
+    sv = v[[f"shap_{f}" for f in C1]].to_numpy()
+    med = pd.Series(joblib.load(ROOT / "results" / "case1" / "random_forest_ngoc" / "model.joblib")
+                    .named_steps["imp"].statistics_, index=C1)
+    Xs = s[C1].fillna(med).astype(float)
+    order = np.argsort(-np.abs(sv).mean(0))
+    for r, j in enumerate(order, 1):
+        f = C1[j]
+        shap.dependence_plot(f, sv, Xs, interaction_index="auto", dot_size=8, alpha=0.5, show=False)
+        plt.ylabel(f"SHAP của {f} (thang xác suất P(SCA = 1))")
+        plt.title(f"RF Case 1 - dependence #{r}: {f} (n = {N:,} dòng train)")
+        plt.gcf().savefig(FIG / f"case1_rf_ngoc_shap_dependence_{r:02d}_{f}.png", dpi=200, bbox_inches="tight")
+        plt.close("all")
+        print(f"{r:02d} {f}")
+
+
 if __name__ == "__main__":
     step = sys.argv[1] if len(sys.argv) > 1 else ""
     if step == "rf1":
         step_rf1(int(sys.argv[2]) if len(sys.argv) > 2 else None)
+    elif step == "plots":
+        step_plots()
     elif step == "analyze":
         step_analyze()
     else:
